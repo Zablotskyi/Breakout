@@ -68,6 +68,10 @@ public class Breakout extends WindowProgram {
                     waitForClick();
                 }
             }
+            if (SHUT_BRICKS == BRICK_COUNT * 2) {
+                endGame(); // End game if all bricks are shut
+                break;
+            }
         }
     }
 
