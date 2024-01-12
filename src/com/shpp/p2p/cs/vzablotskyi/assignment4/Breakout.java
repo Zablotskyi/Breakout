@@ -26,7 +26,7 @@ public class Breakout extends WindowProgram {
     private static final int MAX_TRIES = 3;
 
     private static int BRICK_COUNT = 0;
-    private int SHUT_BRICKS = 0;
+    private static int SHUT_BRICKS = 0;
     private static int SCORE = 0;
 
     private GRect paddle;
@@ -57,7 +57,12 @@ public class Breakout extends WindowProgram {
             checkForCollision();
             pause(DELAY);
 
-            if (ball.getY() >= HEIGHT - BALL_RADIUS * 2) {
+            if (SHUT_BRICKS == BRICK_COUNT) {
+                endGame(); // End game if all bricks are shut
+                break;
+            }
+
+            if (ball.getY() >= HEIGHT - BALL_RADIUS * 3) {
                 // Reduce the number of tries when the ball goes below the paddle
                 tries--;
                 if (tries == 0) {
@@ -67,10 +72,6 @@ public class Breakout extends WindowProgram {
                     resetBall();
                     waitForClick();
                 }
-            }
-            if (SHUT_BRICKS == BRICK_COUNT * 2) {
-                endGame(); // End game if all bricks are shut
-                break;
             }
         }
     }
@@ -93,6 +94,7 @@ public class Breakout extends WindowProgram {
     private void addBricks() {
         for (int i = 0; i < N_ROWS; i++) {
             for (int j = 0; j < N_BRICKS_PER_ROW; j++) {
+                BRICK_COUNT++;
                 GRect brick = new GRect(BRICK_WIDTH, BRICK_HEIGHT);
                 brick.setFilled(true);
 
@@ -101,7 +103,6 @@ public class Breakout extends WindowProgram {
                 double y = (HEIGHT - N_ROWS * (BRICK_HEIGHT + 2)) / 10 + i * (BRICK_HEIGHT + 2);
 
                 add(brick, x, y);
-                BRICK_COUNT++;
             }
         }
     }
@@ -135,11 +136,11 @@ public class Breakout extends WindowProgram {
             if (collider != null) {
                 if (collider != paddle) {
                     remove(collider); // Remove the brick
+                    SHUT_BRICKS++;
+                    SCORE += 10;
                 }
                 vy = -vy; // Reflect the ball off the brick
             }
-            SHUT_BRICKS++;
-            SCORE += 10;
         }
     }
 
