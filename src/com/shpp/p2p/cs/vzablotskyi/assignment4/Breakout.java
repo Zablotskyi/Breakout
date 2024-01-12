@@ -6,7 +6,6 @@ import acm.graphics.GOval;
 import acm.graphics.GRect;
 import acm.util.RandomGenerator;
 import com.shpp.cs.a.graphics.WindowProgram;
-
 import java.awt.event.MouseEvent;
 
 public class Breakout extends WindowProgram {
@@ -20,21 +19,23 @@ public class Breakout extends WindowProgram {
     private static final int BALL_RADIUS = 10;
     private static final int BRICK_WIDTH = 40;
     private static final int BRICK_HEIGHT = 10;
-    private static final int N_BRICKS_PER_ROW = 10;
+    private static final int N_BRICKS_PER_ROW = 1;
     private static final int N_ROWS = 1;
     private static final int DELAY = 10;
     private static final int MAX_TRIES = 3;
-
-    private static int BRICK_COUNT = 0;
-    private static int SHUT_BRICKS = 0;
-    private static int SCORE = 0;
 
     private GRect paddle;
     private GOval ball;
     private GRect brick;
     private GLabel score;
+    private GObject collider;
+    private GLabel gameOver;
+    private GLabel endGame;
     private double vx, vy;
     private int tries;
+    private static int brickCount = 0;
+    private static int shutBriks = 0;
+    private static int SCORE = shutBriks * 10;
 
     public void run() {
         setupGame();
@@ -59,7 +60,7 @@ public class Breakout extends WindowProgram {
             checkForCollision();
             pause(DELAY);
 
-            if (SHUT_BRICKS == BRICK_COUNT) {
+            if (shutBriks == brickCount) {
                 endGame(); // End game if all bricks are shut
                 break;
             }
@@ -96,7 +97,7 @@ public class Breakout extends WindowProgram {
     private void addBricks() {
         for (int i = 0; i < N_ROWS; i++) {
             for (int j = 0; j < N_BRICKS_PER_ROW; j++) {
-                BRICK_COUNT++;
+                brickCount++;
                 brick = new GRect(BRICK_WIDTH, BRICK_HEIGHT);
                 brick.setFilled(true);
 
@@ -134,11 +135,11 @@ public class Breakout extends WindowProgram {
 
         if (getElementAt(x, y) != null || getElementAt(x + BALL_RADIUS * 2, y) != null ||
                 getElementAt(x, y + BALL_RADIUS * 2) != null || getElementAt(x + BALL_RADIUS * 2, y + BALL_RADIUS * 2) != null) {
-            GObject collider = getCollidingObject();
+            collider = getCollidingObject();
             if (collider != null) {
                 if (collider != paddle) {
                     remove(collider); // Remove the brick
-                    SHUT_BRICKS++;
+                    shutBriks++;
                     SCORE += 10;
                 }
                 vy = -vy; // Reflect the ball off the brick
@@ -177,17 +178,17 @@ public class Breakout extends WindowProgram {
     }
 
     private void gameOver() {
-        GLabel label = new GLabel("Game Over", WIDTH / 2, HEIGHT / 2);
-        label.setFont("Helvetica-24");
-        add(label);
+        gameOver = new GLabel("Game Over", WIDTH / 2, HEIGHT / 2);
+        gameOver.setFont("Helvetica-24");
+        add(gameOver);
         pause(1000);
         System.exit(0);
     }
 
     private void endGame() {
-        GLabel label = new GLabel("You won!", WIDTH / 2, HEIGHT / 2);
-        label.setFont("Helvetica-24");
-        add(label);
+        endGame = new GLabel("You won!", WIDTH / 2, HEIGHT / 2);
+        endGame.setFont("Helvetica-24");
+        add(endGame);
         pause(1000);
         System.exit(0);
 
