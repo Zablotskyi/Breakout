@@ -31,6 +31,8 @@ public class Breakout extends WindowProgram {
 
     private GRect paddle;
     private GOval ball;
+    private GRect brick;
+    private GLabel score;
     private double vx, vy;
     private int tries;
 
@@ -95,7 +97,7 @@ public class Breakout extends WindowProgram {
         for (int i = 0; i < N_ROWS; i++) {
             for (int j = 0; j < N_BRICKS_PER_ROW; j++) {
                 BRICK_COUNT++;
-                GRect brick = new GRect(BRICK_WIDTH, BRICK_HEIGHT);
+                brick = new GRect(BRICK_WIDTH, BRICK_HEIGHT);
                 brick.setFilled(true);
 
                 // Змінено розташування цеглин для уникнення виходження за межі екрану
@@ -108,7 +110,7 @@ public class Breakout extends WindowProgram {
     }
 
     private void addScore() {
-        GLabel score = new GLabel("Score: " + SCORE, 0, 10);
+        score = new GLabel("Score: " + SCORE, 0, 10);
         double x = (WIDTH / 2 - score.getWidth() / 2);
         double y = (HEIGHT - PADDLE_HEIGHT - SCORE_Y_OFFSET) - score.getAscent();
         add(score, x, y);
