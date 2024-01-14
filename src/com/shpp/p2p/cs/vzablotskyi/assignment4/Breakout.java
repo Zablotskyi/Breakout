@@ -26,11 +26,6 @@ public class Breakout extends WindowProgram {
 
     private GRect paddle;
     private GOval ball;
-    private GRect brick;
-    private GLabel score;
-    private GObject collider;
-    private GLabel gameOver;
-    private GLabel endGame;
     private double vx, vy;
     private int tries;
     private static int brickCount = 0;
@@ -98,7 +93,7 @@ public class Breakout extends WindowProgram {
         for (int i = 0; i < N_ROWS; i++) {
             for (int j = 0; j < N_BRICKS_PER_ROW; j++) {
                 brickCount++;
-                brick = new GRect(BRICK_WIDTH, BRICK_HEIGHT);
+                GRect brick = new GRect(BRICK_WIDTH, BRICK_HEIGHT);
                 brick.setFilled(true);
 
                 // Змінено розташування цеглин для уникнення виходження за межі екрану
@@ -111,7 +106,7 @@ public class Breakout extends WindowProgram {
     }
 
     private void addScore() {
-        score = new GLabel("Score: " + SCORE, 0, 10);
+        GLabel score = new GLabel("Score: " + SCORE, 0, 10);
         double x = (WIDTH / 2 - score.getWidth() / 2);
         double y = (HEIGHT - PADDLE_HEIGHT - SCORE_Y_OFFSET) - score.getAscent();
         add(score, x, y);
@@ -135,7 +130,7 @@ public class Breakout extends WindowProgram {
 
         if (getElementAt(x, y) != null || getElementAt(x + BALL_RADIUS * 2, y) != null ||
                 getElementAt(x, y + BALL_RADIUS * 2) != null || getElementAt(x + BALL_RADIUS * 2, y + BALL_RADIUS * 2) != null) {
-            collider = getCollidingObject();
+            GObject collider = getCollidingObject();
             if (collider != null) {
                 if (collider != paddle) {
                     remove(collider); // Remove the brick
@@ -178,7 +173,7 @@ public class Breakout extends WindowProgram {
     }
 
     private void gameOver() {
-        gameOver = new GLabel("Game Over", WIDTH / 2, HEIGHT / 2);
+        GLabel gameOver = new GLabel("Game Over", WIDTH / 2, HEIGHT / 2);
         gameOver.setFont("Helvetica-24");
         add(gameOver);
         pause(1000);
@@ -186,7 +181,7 @@ public class Breakout extends WindowProgram {
     }
 
     private void endGame() {
-        endGame = new GLabel("You won!", WIDTH / 2, HEIGHT / 2);
+        GLabel endGame = new GLabel("You won!", WIDTH / 2, HEIGHT / 2);
         endGame.setFont("Helvetica-24");
         add(endGame);
         pause(1000);
